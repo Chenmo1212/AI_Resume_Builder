@@ -1,0 +1,266 @@
+% Based (but completely redesigned) on Resume in Latex Template by Sourabh Bajaj
+\documentclass[letterpaper, 11pt]{article}
+
+\pdfgentounicode=1
+
+% font
+\usepackage[T1]{fontenc}
+\usepackage[sfdefault]{noto}
+
+% packages
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{scrextend}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{fontawesome}
+\usepackage{setspace}
+\usepackage{enumitem}
+
+\usepackage[left=1.0cm,right=1.0cm,top=1.5cm,bottom=1.5cm]{geometry}
+
+% custom
+
+% command macros
+\newcommand{\iconSpace}{\hspace{1px}}
+\newcommand{\bulletSpace}{\vspace{-5pt}}
+\newcommand{\hSpace}{\hspace{8px}}
+\newcommand{\secStartSpace}{\vspace{3pt}}
+\newcommand{\secEndSpace}{\vspace{5pt}}
+\newcommand{\spaceCollapse}{\vspace{-5pt}}
+% use the macro for work experience header
+% arg 1 = header title
+% arg 2 = position title (subtitle (in italics)
+% arg 3 = date
+\newcommand{\workHeader}[3]{
+\noindent \textbf{#1} \hfill \textbf{#3}\\
+	\textit{#2}
+}
+
+% line spacing
+\linespread{1.15}
+
+% colors
+\definecolor{blue}{RGB}{14, 100, 237} % change the blue color if this one is not to your liking
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=blue,
+    urlcolor=blue,
+}
+
+% indent space
+\titlespacing{\section}{0pt}{15px}{2ex}
+
+% Sections formatting
+\titleformat{\section}{
+\vspace{0pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-0.8em}]
+
+\begin{document}
+
+% ------------- header ------------- %
+\begin{center} 
+{\Large \textbf{\VAR{ basic.name }}}\\
+\vspace{1px}
+% "footnotes" (icon + link)
+{\footnotesize
+    \faicon{envelope} \href{mailto:\VAR{ basic.contact.email }}{\VAR{ basic.contact.email }} \hSpace
+    \faicon{phone} \iconSpace \VAR{ basic.contact.phone }\hSpace 
+    \faicon{map-marker} \iconSpace \VAR{ basic.address }\hSpace
+}\\
+
+{\footnotesize
+%% if "websites" in basic and basic.websites|length > 0:
+    %% for website in basic.websites
+    \BLOCK{ if "icon" in website }\faicon{\VAR{ website.icon }}  \iconSpace \BLOCK{ endif }\href{\VAR{ website.url }} {\VAR{ website.text }}  \hSpace
+    %% endfor
+%% endif
+}
+\end{center}
+\spaceCollapse
+% ------------- end header ------------- %
+
+% ------------- profile summary ------------- %
+% 
+% Three sentences
+% 1: Introduce who you are
+% 2: What is your skills set with your background
+% 3: What are you looking for
+
+\section{\color{black} \textbf{Profile Summary}}
+\secStartSpace
+\begin{addmargin}[0em]{1em}
+\VAR{ summary }
+\end{addmargin}
+\secEndSpace
+% ------------- end profile summary ------------- %
+
+
+% ------------- work experience ------------- %
+%#
+%% if experiences is defined:
+\section{\color{black} \textbf{Work Experience}}
+\secStartSpace
+\begin{addmargin}[0em]{1em}
+    %% for job in experiences:
+
+    \noindent \textbf{\VAR{ job.company }} \hfill \textbf{\VAR{ job.startdate } - \VAR{ job.enddate }}\\
+        %% if "titles" in job and job.titles | length > 0:
+            %% for title in job.titles:
+    \textit{\VAR{ title.name }}
+                %% if job.titles | length > 1:
+    - (\VAR{ title.startdate } - \VAR{ title.enddate })
+                      %% if not loop.last:
+    \\
+                      %% endif
+                %% endif
+            %% endfor
+        %% endif
+
+        %% if "highlights" in job and job.highlights|length > 0:
+    \begin{itemize}[leftmargin=1.5em]
+    \vspace{-5px}
+            %% for highlight in job.highlights:
+    \item \VAR{ highlight }
+    \bulletSpace
+            %% endfor
+    \end{itemize}
+        %% endif
+    \vspace{3px}
+    %% endfor
+
+\end{addmargin}
+\secEndSpace
+%% endif
+
+% ------------- end experience ------------- %
+
+% ------------- skills ------------- %
+%% if (skills is defined and skills|length > 0):
+\section{\color{black} \textbf{Skills}}
+\secStartSpace
+\begin{addmargin}[0em]{1em}
+
+\begin{itemize}[leftmargin=1.5em]
+%% for category in skills:
+    \item \textbf{\VAR{ category.category }}: \VAR{ category.skills|join(', ') } \bulletSpace
+%% endfor
+\end{itemize}
+
+\end{addmargin}
+\secEndSpace
+%% endif
+% ------------- end skills ------------- %
+
+% ------------- projects ------------- %
+%% if projects is defined:
+\section{\color{black} \textbf{Projects}}
+\secStartSpace
+\begin{addmargin}[0em]{1em}
+%% for project in projects:
+
+    \noindent
+    %% if project.demoUrl:
+    \href{\VAR{ project.demoUrl }}{\textbf{\VAR{ project.title }:}}
+    %% elif project.githubUrl:
+    \href{\VAR{ project.demoUrl }}{\textbf{\VAR{ project.title }:}}
+    %% else:
+    \textbf{\VAR{ project.title }:}
+    %% endif
+    \hfill
+    %% if project.githubUrl:
+    \faicon{github} \href{\VAR{ project.githubUrl }}{\underline{GITHUB}}
+    %% endif
+    %% if project.demoUrl:
+    \faicon{globe} \href{\VAR{ project.demoUrl }}{\underline{DEMO}}
+    %% endif
+
+    \noindent \VAR{project.description} \spaceCollapse
+    %% if project.highlights:
+    \begin{itemize}[leftmargin=1.5em]
+        %% for highlight in project.highlights:
+    \item \VAR{highlight} \bulletSpace
+        %% endfor
+    \end{itemize}
+    %% endif
+%% endfor
+\end{addmargin}
+%% endif
+% ------------- end projects ------------- %
+
+% ------------- education ------------- %
+% 
+% Don't need to give something like the relevant modules.
+% Can write your dissertation
+%
+
+%#
+%% if education is defined
+
+\section{\color{black} \textbf{Education}}
+\secStartSpace
+\begin{addmargin}[0em]{1em}
+
+%% for school in education:
+    \noindent\textbf{\VAR{ school.school }}
+    %% if "startdate" in school:
+    \hfill \textbf{\VAR{ school.startdate } - \VAR{ school.enddate }} \\
+    \vspace{3pt}
+    %% endif
+
+    %% if "degrees" in school and school.degrees|length > 0:
+        %% for degree in school.degrees:
+            %% for name in degree.names:
+                %% if school.degrees | length > 1:
+    \VAR{ name }} \hfill \textbf{\VAR{ degree.startdate } - \VAR{ degree.enddate }} \\
+                %% endif
+            %% endfor
+
+            %% if "gpa" in degree:
+    \ &\hspace{1.5em}GPA: \VAR{ degree.gpa } \\
+            %% endif
+
+            %% if "dissertation" in degree:
+    \textbf{Dissertation}: \textit{\VAR{ degree.dissertation.title }}
+    \begin{itemize}[leftmargin=1.5em] \vspace{-10px}
+    \item \VAR{ degree.dissertation.description }
+    \end{itemize}
+            %% endif
+
+        %% endfor
+    %% endif
+
+%#
+%% endfor
+
+\end{addmargin}
+\secEndSpace
+%% endif
+% ------------- end education ------------- %
+
+
+% % ------------- achievements ------------- %
+%% if achievement is defined:
+
+\section{\color{black} \textbf{Achievements}}
+\secStartSpace
+
+\begin{addmargin}[0em]{1em}
+\begin{itemize}
+\setstretch{0}
+
+%% for achievement in achievements:
+    \item \VAR{ achievement.title } (\VAR{ achievement.money })} \hfill  \textbf{\VAR{ achievement.year }}
+%% endfor
+\end{itemize}
+\end{addmargin}
+
+%% endif
+% % ------------- end achievements ------------- %
+
+\vspace{2em}
+\noindent\textbf{References available on request}
+
+\end{document}
